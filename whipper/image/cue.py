@@ -18,10 +18,9 @@
 # You should have received a copy of the GNU General Public License
 # along with whipper.  If not, see <http://www.gnu.org/licenses/>.
 
-"""
-Reading .cue files
+"""Reading .cue files.
 
-See http://digitalx.org/cuesheetsyntax.php
+.. seealso:: http://digitalx.org/cuesheetsyntax.php
 """
 
 import re
@@ -59,17 +58,19 @@ _INDEX_RE = re.compile(r"""
 
 
 class CueFile(object):
-    """
-    I represent a .cue file as an object.
+    """I represent a .cue file as an object.
 
-    @type table: L{table.Table}
-    @ivar table: the index table.
+    :ivar table: the index table.
+    :vartype table: L{table.Table}
     """
+
     logCategory = 'CueFile'
 
     def __init__(self, path):
-        """
-        @type  path: unicode
+        """Bla, bla.
+
+        :param path:
+        :type path: unicode
         """
         assert type(path) is unicode, "%r is not unicode" % path
 
@@ -151,10 +152,12 @@ class CueFile(object):
                 continue
 
     def message(self, number, message):
-        """
-        Add a message about a given line in the cue file.
+        """Add a message about a given line in the cue file.
 
-        @param number: line number, counting from 0.
+        :param number: line number, counting from 0.
+        :type number:
+        :param message:
+        :type message:
         """
         self._messages.append((number + 1, message))
 
@@ -179,22 +182,24 @@ class CueFile(object):
         return -1
 
     def getRealPath(self, path):
-        """
-        Translate the .cue's FILE to an existing path.
+        """Translate the .cue's FILE to an existing path.
 
-        @type  path: unicode
+        :param path:
+        :type path:
         """
         return common.getRealPath(self._path, path)
 
 
 class File:
-    """
-    I represent a FILE line in a cue file.
-    """
+    """I represent a FILE line in a cue file."""
 
     def __init__(self, path, format):
-        """
-        @type  path: unicode
+        """Bla, bla.
+
+        :param path:
+        :type path: unicode
+        :param format:
+        :type format:
         """
         assert type(path) is unicode, "%r is not unicode" % path
 

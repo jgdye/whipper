@@ -18,8 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with whipper.  If not, see <http://www.gnu.org/licenses/>.
 
-"""
-Reading .toc files
+"""Reading .toc files.
 
 The .toc file format is described in the man page of cdrdao
 """
@@ -93,8 +92,8 @@ _INDEX_RE = re.compile(r"""
 
 
 class Sources:
-    """
-    I represent the list of sources used in the .toc file.
+    """I represent the list of sources used in the .toc file.
+
     Each SILENCE and each FILE is a source.
     If the filename for FILE doesn't change, the counter is not increased.
     """
@@ -103,19 +102,25 @@ class Sources:
         self._sources = []
 
     def append(self, counter, offset, source):
-        """
-        @param counter: the source counter; updates for each different
-                        data source (silence or different file path)
-        @type  counter: int
-        @param offset:  the absolute disc offset where this source starts
+        """Bla, bla.
+
+        :param counter: the source counter; updates for each different
+                        data source (silence or different file path).
+        :type counter: int
+        :param offset: the absolute disc offset where this source starts.
+        :type offset:
+        :param source:
+        :type source:
         """
         logger.debug('Appending source, counter %d, abs offset %d, '
                      'source %r' % (counter, offset, source))
         self._sources.append((counter, offset, source))
 
     def get(self, offset):
-        """
-        Retrieve the source used at the given offset.
+        """Retrieve the source used at the given offset.
+
+        :param offset:
+        :type offset:
         """
         for i, (c, o, s) in enumerate(self._sources):
             if offset < o:
@@ -124,8 +129,10 @@ class Sources:
         return self._sources[-1]
 
     def getCounterStart(self, counter):
-        """
-        Retrieve the absolute offset of the first source for this counter
+        """Retrieve the absolute offset of the first source for this counter.
+
+        :param counter:
+        :type counter:
         """
         for i, (c, o, s) in enumerate(self._sources):
             if c == counter:
@@ -137,8 +144,10 @@ class Sources:
 class TocFile(object):
 
     def __init__(self, path):
-        """
-        @type  path: unicode
+        """Bla, bla.
+
+        :param path:
+        :type path: unicode
         """
         assert type(path) is unicode, "%r is not unicode" % path
         self._path = path
@@ -378,17 +387,22 @@ class TocFile(object):
         logger.debug('parse: leadout: %r', self.table.leadout)
 
     def message(self, number, message):
-        """
-        Add a message about a given line in the cue file.
+        """Add a message about a given line in the cue file.
 
-        @param number: line number, counting from 0.
+        :param number: line number, counting from 0.
+        :type number:
+        :param message:
+        :type message:
         """
         self._messages.append((number + 1, message))
 
     def getTrackLength(self, track):
-        """
-        Returns the length of the given track, from its INDEX 01 to the next
-        track's INDEX 01
+        """Compute the length of the given track.
+
+        The lenght is computed from its INDEX 01 to the next track's INDEX 01.
+
+        :param track:
+        :type track:
         """
         # returns track length in frames, or -1 if can't be determined and
         # complete file should be assumed
@@ -410,25 +424,26 @@ class TocFile(object):
         return -1
 
     def getRealPath(self, path):
-        """
-        Translate the .toc's FILE to an existing path.
+        """Translate the .toc's FILE to an existing path.
 
-        @type  path: unicode
+        :param path:
+        :type path:
         """
         return common.getRealPath(self._path, path)
 
 
 class File:
-    """
-    I represent a FILE line in a .toc file.
-    """
+    """I represent a FILE line in a .toc file."""
 
     def __init__(self, path, start, length):
-        """
-        @type  path:   C{unicode}
-        @type  start:  C{int}
-        @param start:  starting point for the track in this file, in frames
-        @param length: length for the track in this file, in frames
+        """Bla, bla.
+
+        :param path:
+        :type path: C{unicode}
+        :param start: starting point for the track in this file, in frames.
+        :type start: C{int}
+        :param length: length for the track in this file, in frames.
+        :type length:
         """
         assert type(path) is unicode, "%r is not unicode" % path
 

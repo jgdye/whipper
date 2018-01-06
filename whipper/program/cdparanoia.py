@@ -37,12 +37,9 @@ logger = logging.getLogger(__name__)
 
 
 class FileSizeError(Exception):
+    """The given path does not have the expected size."""
 
     message = None
-
-    """
-    The given path does not have the expected size.
-    """
 
     def __init__(self, path, message):
         self.args = (path, message)
@@ -51,9 +48,7 @@ class FileSizeError(Exception):
 
 
 class ReturnCodeError(Exception):
-    """
-    The program had a non-zero return code.
-    """
+    """The program had a non-zero return code."""
 
     def __init__(self, returncode):
         self.args = (returncode, )
@@ -87,11 +82,12 @@ class ProgressParser:
     reads = 0  # total number of reads
 
     def __init__(self, start, stop):
-        """
-        @param start:  first frame to rip
-        @type  start:  int
-        @param stop:   last frame to rip (inclusive)
-        @type  stop:   int
+        """Bla, bla.
+
+        :param start: first frame to rip.
+        :type start: int
+        :param stop: last frame to rip (inclusive).
+        :type stop: int
         """
         self.start = start
         self.stop = stop
@@ -102,8 +98,10 @@ class ProgressParser:
         self._reads = {}  # read count for each sector
 
     def parse(self, line):
-        """
-        Parse a line.
+        """Parse a line.
+
+        :param line:
+        :type line:
         """
         m = _PROGRESS_RE.search(line)
         if m:
@@ -184,9 +182,12 @@ class ProgressParser:
         self.wrote = frameOffset
 
     def getTrackQuality(self):
-        """
-        Each frame gets read twice.
+        """Each frame gets read twice.
+
         More than two reads for a frame reduce track quality.
+
+        :returns:
+        :rtype: float or int
         """
         frames = self.stop - self.start + 1  # + 1 since stop is inclusive
         reads = self.reads
@@ -203,11 +204,7 @@ class ProgressParser:
 # FIXME: handle errors
 
 class ReadTrackTask(task.Task):
-    """
-    I am a task that reads a track using cdparanoia.
-
-    @ivar reads: how many reads were done to rip the track
-    """
+    """I am a task that reads a track using cdparanoia."""
 
     description = "Reading track"
     quality = None  # set at end of reading
@@ -218,25 +215,24 @@ class ReadTrackTask(task.Task):
 
     def __init__(self, path, table, start, stop, overread, offset=0,
                  device=None, action="Reading", what="track"):
-        """
-        Read the given track.
+        """Read the given track.
 
-        @param path:   where to store the ripped track
-        @type  path:   unicode
-        @param table:  table of contents of CD
-        @type  table:  L{table.Table}
-        @param start:  first frame to rip
-        @type  start:  int
-        @param stop:   last frame to rip (inclusive); >= start
-        @type  stop:   int
-        @param offset: read offset, in samples
-        @type  offset: int
-        @param device: the device to rip from
-        @type  device: str
-        @param action: a string representing the action; e.g. Read/Verify
-        @type  action: str
-        @param what:   a string representing what's being read; e.g. Track
-        @type  what:   str
+        :param path: where to store the ripped track.
+        :type path: unicode
+        :param table: table of contents of CD.
+        :type table: L{table.Table}
+        :param start: first frame to rip.
+        :type start: int
+        :param stop: last frame to rip (inclusive); >= start.
+        :type stop: int
+        :param offset: read offset, in samples.
+        :type offset: int
+        :param device: the device to rip from.
+        :type device: str
+        :param action: a string representing the action; e.g. Read/Verify.
+        :type action: str
+        :param what: a string representing what's being read; e.g. Track.
+        :type what: str
         """
         assert type(path) is unicode, "%r is not unicode" % path
 
@@ -299,7 +295,7 @@ class ReadTrackTask(task.Task):
                                          stdout=subprocess.PIPE,
                                          stderr=subprocess.PIPE,
                                          close_fds=True)
-        except OSError, e:
+        except OSError as e:
             import errno
             if e.errno == errno.ENOENT:
                 raise common.MissingDependencyException('cdparanoia')
@@ -398,24 +394,24 @@ class ReadTrackTask(task.Task):
 
 
 class ReadVerifyTrackTask(task.MultiSeparateTask):
-    """
-    I am a task that reads and verifies a track using cdparanoia.
+    """I am a task that reads and verifies a track using cdparanoia.
+
     I also encode the track.
 
     The path where the file is stored can be changed if necessary, for
     example if the file name is too long.
 
-    @ivar path:         the path where the file is to be stored.
-    @ivar checksum:     the checksum of the track; set if they match.
-    @ivar testchecksum: the test checksum of the track.
-    @ivar copychecksum: the copy checksum of the track.
-    @ivar testspeed:    the test speed of the track, as a multiple of
-                        track duration.
-    @ivar copyspeed:    the copy speed of the track, as a multiple of
-                        track duration.
-    @ivar testduration: the test duration of the track, in seconds.
-    @ivar copyduration: the copy duration of the track, in seconds.
-    @ivar peak:         the peak level of the track
+    :cvar path: the path where the file is to be stored.
+    :cvar checksum: the checksum of the track; set if they match.
+    :cvar testchecksum: the test checksum of the track.
+    :cvar copychecksum: the copy checksum of the track.
+    :cvar testspeed: the test speed of the track, as a multiple of
+                     track duration.
+    :cvar copyspeed: the copy speed of the track, as a multiple of
+                     track duration.
+    :cvar testduration: the test duration of the track, in seconds.
+    :cvar copyduration: the copy duration of the track, in seconds.
+    :cvar peak: the peak level of the track
     """
 
     checksum = None
@@ -433,21 +429,22 @@ class ReadVerifyTrackTask(task.MultiSeparateTask):
 
     def __init__(self, path, table, start, stop, overread, offset=0,
                  device=None, taglist=None, what="track"):
-        """
-        @param path:    where to store the ripped track
-        @type  path:    str
-        @param table:   table of contents of CD
-        @type  table:   L{table.Table}
-        @param start:   first frame to rip
-        @type  start:   int
-        @param stop:    last frame to rip (inclusive)
-        @type  stop:    int
-        @param offset:  read offset, in samples
-        @type  offset:  int
-        @param device:  the device to rip from
-        @type  device:  str
-        @param taglist: a dict of tags
-        @type  taglist: dict
+        """Bla, bla.
+
+        :param path: where to store the ripped track
+        :type  path: str
+        :param table: table of contents of CD
+        :type  table: L{table.Table}
+        :param start: first frame to rip
+        :type  start: int
+        :param stop: last frame to rip (inclusive)
+        :type  stop: int
+        :param offset: read offset, in samples
+        :type  offset: int
+        :param device: the device to rip from
+        :type  device: str
+        :param taglist: a dict of tags
+        :type  taglist: dict
         """
         task.MultiSeparateTask.__init__(self)
 
@@ -478,7 +475,7 @@ class ReadVerifyTrackTask(task.MultiSeparateTask):
         try:
             tmpoutpath = path + u'.part'
             open(tmpoutpath, 'wb').close()
-        except IOError, e:
+        except IOError as e:
             if errno.ENAMETOOLONG != e.errno:
                 raise
             path = common.shrinkPath(path)
@@ -540,7 +537,7 @@ class ReadVerifyTrackTask(task.MultiSeparateTask):
                     try:
                         logger.debug('Moving to final path %r', self.path)
                         os.rename(self._tmppath, self.path)
-                    except Exception, e:
+                    except Exception as e:
                         logger.debug('Exception while moving to final '
                                      'path %r: %r', self.path, str(e))
                         self.exception = e
@@ -548,7 +545,7 @@ class ReadVerifyTrackTask(task.MultiSeparateTask):
                     os.unlink(self._tmppath)
             else:
                 logger.debug('stop: exception %r', self.exception)
-        except Exception, e:
+        except Exception as e:
             print 'WARNING: unhandled exception %r' % (e, )
 
         task.MultiSeparateTask.stop(self)

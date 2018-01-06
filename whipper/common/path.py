@@ -22,16 +22,19 @@ import re
 
 
 class PathFilter(object):
-    """
-    I filter path components for safe storage on file systems.
-    """
+    """I filter path components for safe storage on file systems."""
 
     def __init__(self, slashes=True, quotes=True, fat=True, special=False):
-        """
-        @param slashes: whether to convert slashes to dashes
-        @param quotes:  whether to normalize quotes
-        @param fat:     whether to strip characters illegal on FAT filesystems
-        @param special: whether to strip special characters
+        """Bla, bla.
+
+        :param slashes: whether to convert slashes to dashes.
+        :type slashes:
+        :param quotes: whether to normalize quotes.
+        :type quotes:
+        :param fat: whether to strip characters illegal on FAT filesystems.
+        :type fat:
+        :param special: whether to strip special characters.
+        :type special:
         """
         self._slashes = slashes
         self._quotes = quotes

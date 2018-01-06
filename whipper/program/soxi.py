@@ -10,18 +10,21 @@ SOXI = 'soxi'
 
 
 class AudioLengthTask(ctask.PopenTask):
-    """
-    I calculate the length of a track in audio samples.
+    """Calculate the length of a track in audio samples.
 
-    @ivar  length: length of the decoded audio file, in audio samples.
+    :cvar length: length of the decoded audio file, in audio samples.
+    :vartype length: int or None
     """
+
     logCategory = 'AudioLengthTask'
     description = 'Getting length of audio track'
     length = None
 
     def __init__(self, path):
-        """
-        @type  path: unicode
+        """Bla, bla.
+
+        :param path: full path to audio track.
+        :type path: unicode
         """
         assert type(path) is unicode, "%r is not unicode" % path
 
